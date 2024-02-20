@@ -1,6 +1,6 @@
 package org.spring.study.data.dto;
 
-import lombok.*;
+import lombok.Getter;
 
 @Getter
 public class ChangeProductNameDto {
