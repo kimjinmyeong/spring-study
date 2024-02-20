@@ -40,8 +40,13 @@ public class ProductDAOImpl implements ProductDAO {
 
         Product updatedProduct;
         if (selectedProduct.isPresent()) {
+            Product product = selectedProduct.get();
             updatedProduct = productRepository.save(Product.builder()
+                    .number(product.getNumber())
                     .name(name)
+                    .stock(product.getStock())
+                    .price(product.getPrice())
+                    .createdAt(product.getCreatedAt())
                     .updatedAt(LocalDateTime.now())
                     .build());
         } else {
