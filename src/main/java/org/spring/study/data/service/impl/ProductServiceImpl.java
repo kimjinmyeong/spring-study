@@ -6,6 +6,7 @@ import org.spring.study.data.dto.ProductResponseDto;
 import org.spring.study.data.entity.Product;
 import org.spring.study.data.service.ProductService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -19,6 +20,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProductResponseDto getProduct(Long number) {
         Product product = productDAO.selectProduct(number);
 
