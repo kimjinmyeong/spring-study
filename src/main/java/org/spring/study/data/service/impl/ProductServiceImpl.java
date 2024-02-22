@@ -1,5 +1,7 @@
 package org.spring.study.data.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spring.study.data.dao.ProductDAO;
 import org.spring.study.data.dto.ProductDto;
 import org.spring.study.data.dto.ProductResponseDto;
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(ProductServiceImpl.class);
     private final ProductDAO productDAO;
 
     public ProductServiceImpl(ProductDAO productDAO) {
@@ -22,7 +25,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public ProductResponseDto getProduct(Long number) {
+        LOGGER.info("[getProduct] input number : {}", number);
         Product product = productDAO.selectProduct(number);
+        LOGGER.info("[getProduct] product number : {}, name : {}", product.getNumber(),
+                product.getName());
 
         ProductResponseDto productResponseDto = ProductResponseDto.builder()
                 .number(product.getNumber())
@@ -36,6 +42,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponseDto saveProduct(ProductDto productDto) {
+        LOGGER.info("[saveProduct] productDTO : {}", productDto.toString());
         Product product = Product.builder()
                 .name(productDto.getName())
                 .price(productDto.getPrice())
@@ -45,6 +52,7 @@ public class ProductServiceImpl implements ProductService {
                 .build();
 
         Product savedProduct = productDAO.insertProduct(product);
+        LOGGER.info("[saveProduct] savedProduct : {}", savedProduct);
 
         ProductResponseDto productResponseDto = ProductResponseDto.builder()
                 .number(savedProduct.getNumber())
