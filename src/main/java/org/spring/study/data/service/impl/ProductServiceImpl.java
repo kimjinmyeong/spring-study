@@ -47,8 +47,6 @@ public class ProductServiceImpl implements ProductService {
                 .name(productDto.getName())
                 .price(productDto.getPrice())
                 .stock(productDto.getStock())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .build();
 
         Product savedProduct = productDAO.insertProduct(product);

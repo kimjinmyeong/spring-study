@@ -6,7 +6,6 @@ import org.spring.study.data.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Component
@@ -46,8 +45,6 @@ public class ProductDAOImpl implements ProductDAO {
                     .name(name)
                     .stock(product.getStock())
                     .price(product.getPrice())
-                    .createdAt(product.getCreatedAt())
-                    .updatedAt(LocalDateTime.now())
                     .build());
         } else {
             throw new Exception();
