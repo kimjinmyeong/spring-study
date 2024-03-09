@@ -17,25 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-
-    services:
-      postgres:
-        # Docker Hub image
-        image: postgres
-        # Provide the password for postgres
-        env:
-          POSTGRES_USER: testuser
-          POSTGRES_PASSWORD: test
-          POSTGRES_DB: testdb
-        ports:
-        - 5432:5432
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 17
@@ -43,6 +24,11 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+
+
+    - uses: harmon758/postgresql-action@v1
+      with:
+        postgresql version: '11'  # See https://hub.docker.com/_/postgres for available versions
 
     # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
