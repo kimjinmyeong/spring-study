@@ -13,6 +13,16 @@ on:
 
 jobs:
   build:
+    services:
+      postgres:
+        image: postgres:latest  # Adjust version as needed
+        env:
+          POSTGRES_USER: postgres  # Set environment variables for database credentials
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: testdb  # Adjust database name if needed
+        ports:
+          - 5432:5432  # Map container port to host port
+
 
     runs-on: ubuntu-latest
     permissions:
@@ -25,11 +35,6 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-
-    - uses: harmon758/postgresql-action@v1
-      with:
-        postgresql version: '11'  # See https://hub.docker.com/_/postgres for available versions
-
     # Configure Gradle for optimal use in GiHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
     - name: Setup Gradle
@@ -39,9 +44,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle Wrapper
-      run: ./gradlew build --scan
-
-
+      run: ./gradlew build
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
