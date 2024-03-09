@@ -18,6 +18,16 @@ jobs:
     permissions:
       contents: read
 
+    services:
+      postgres:
+        image: postgres:latest  # Adjust version as needed
+        env:
+          POSTGRES_USER: postgres  # Set environment variables for database credentials
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: testdb  # Adjust database name if needed
+        ports:
+          - 5432:5432  # Map container port to host port
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 17
