@@ -24,7 +24,9 @@ jobs:
         image: postgres
         # Provide the password for postgres
         env:
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: gimjinmyeong
+
+          POSTGRES_DB: springstudy
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -50,11 +52,6 @@ jobs:
 
     - name: Build with Gradle Wrapper
       run: ./gradlew build
-      env:
-        # The hostname used to communicate with the PostgreSQL service container
-        POSTGRES_HOST: postgres
-        # The default PostgreSQL port
-        POSTGRES_PORT: 5432
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
