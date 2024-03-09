@@ -13,21 +13,14 @@ on:
 
 jobs:
   build:
-    services:
-      postgres:
-        image: postgres:latest  # Adjust version as needed
-        env:
-          POSTGRES_USER: postgres  # Set environment variables for database credentials
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: testdb  # Adjust database name if needed
-        ports:
-          - 5432:5432  # Map container port to host port
-
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
+  
     steps:
+    - name: Set up PostgreSQL
+    - uses: ikalnytskyi/action-setup-postgres@v5
+    
     - uses: actions/checkout@v4
     - name: Set up JDK 17
       uses: actions/setup-java@v4
