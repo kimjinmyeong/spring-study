@@ -37,11 +37,9 @@ jobs:
 
     - name: Grant permissions to Gradle wrapper
       run: chmod +x gradlew
-    - name: Configure application.properties (Optional)
-      run: | 
-        echo "spring.datasource.url=jdbc:postgresql://postgres:5432/testdb" >> application.properties
+
     - name: Build with Gradle Wrapper
-      run: ./gradlew build
+      run: ./gradlew build --scan
 
 
 
