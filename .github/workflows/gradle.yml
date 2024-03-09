@@ -27,7 +27,8 @@ jobs:
           POSTGRES_USER: testuser
           POSTGRES_PASSWORD: test
           POSTGRES_DB: testdb
-          POSTGRES_PORT: 5432
+        ports:
+        - 5432:5432
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -50,9 +51,12 @@ jobs:
 
     - name: Grant permissions to Gradle wrapper
       run: chmod +x gradlew
-
+    - name: Configure application.properties (Optional)
+      run: | 
+        echo "spring.datasource.url=jdbc:postgresql://postgres:5432/testdb" >> application.properties
     - name: Build with Gradle Wrapper
       run: ./gradlew build
+
 
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
