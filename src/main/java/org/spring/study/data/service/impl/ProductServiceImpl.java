@@ -7,10 +7,10 @@ import org.spring.study.data.dto.ProductDto;
 import org.spring.study.data.dto.ProductResponseDto;
 import org.spring.study.data.entity.Product;
 import org.spring.study.data.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -18,6 +18,7 @@ public class ProductServiceImpl implements ProductService {
     private final Logger LOGGER = LoggerFactory.getLogger(ProductServiceImpl.class);
     private final ProductDAO productDAO;
 
+    @Autowired
     public ProductServiceImpl(ProductDAO productDAO) {
         this.productDAO = productDAO;
     }
