@@ -9,6 +9,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spring.study.data.entity.BlackList;
+import org.spring.study.data.repository.RedisRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -26,16 +30,15 @@ public class JwtTokenProvider {
 
     private final Logger LOGGER = LoggerFactory.getLogger(JwtTokenProvider.class);
     private final UserDetailsService userDetailsService;
+    private final RedisRepository redisRepository;
 
-    private String secretKey = "secretKey";
+    private @Value("${springboot.jwt.secret}") String secretKey;
     private final long tokenValidMillisecond = 1000L * 60 * 60; // 1시간 토큰 유효
 
     @PostConstruct
     protected void init() {
         LOGGER.info("[init] JwtTokenProvider 내 secretKey 초기화 시작");
-        System.out.println(secretKey);
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
-        System.out.println(secretKey);
         LOGGER.info("[init] JwtTokenProvider 내 secretKey 초기화 완료");
     }
 
@@ -83,7 +86,7 @@ public class JwtTokenProvider {
      * @return String type Token 값
      */
     public String resolveToken(HttpServletRequest request) {
-        LOGGER.info("[JwtTokenProvider] HTTP 헤더에서 Token 값 추출");
+        LOGGER.info("[JwtTokenProvider] HTTP 헤더에서 Token 값 추출 : {}", request.getHeader("X-AUTH-TOKEN"));
         return request.getHeader("X-AUTH-TOKEN");
     }
 
@@ -93,6 +96,11 @@ public class JwtTokenProvider {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             LOGGER.info("[JwtTokenProvider] 토큰 유효 체크 완료");
+            Optional<BlackList> blackList = redisRepository.findById(token);
+            if (blackList.isPresent()) {
+                LOGGER.info("[JwtTokenProvider] 블랙 리스트 토큰입니다.");
+                return false;
+            }
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             LOGGER.info("[JwtTokenProvider] 토큰 유효 체크 예외 발생");
