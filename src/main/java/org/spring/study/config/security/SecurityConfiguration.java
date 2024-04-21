@@ -1,6 +1,6 @@
 package org.spring.study.config.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.spring.study.data.repository.RedisRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,10 +18,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final RedisRepository redisRepository;
 
-    @Autowired
-    public SecurityConfiguration(JwtTokenProvider jwtTokenProvider) {
+    public SecurityConfiguration(JwtTokenProvider jwtTokenProvider, RedisRepository redisRepository) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.redisRepository = redisRepository;
     }
 
     @Bean
@@ -39,7 +40,14 @@ public class SecurityConfiguration {
                 .exceptionHandling((exception) -> exception.accessDeniedHandler(new CustomAccessDeniedHandler()))
                 .exceptionHandling((exception) -> exception.authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-                        UsernamePasswordAuthenticationFilter.class); // JWT Token 필터를 id/password 인증 필터 이전에 추가
+                        UsernamePasswordAuthenticationFilter.class) // JWT Token 필터를 id/password 인증 필터 이전에 추가
+                .logout(logout -> { // logout 시 수행하는 handler 설정
+                    logout.addLogoutHandler(new CustomUserLogoutHandler(jwtTokenProvider, redisRepository))
+                            .logoutUrl("/sign-api/logout")
+                            .logoutSuccessHandler(new CustomUserLogoutSuccessHandler())
+                            .permitAll();
+                });
+
         return httpSecurity.build();
     }
 
