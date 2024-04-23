@@ -51,6 +51,10 @@ public class ProductController {
     }
 
     @PutMapping
+    @Parameters({
+            @Parameter(name = "X-AUTH-TOKEN", description = "로그인 성공 후 발급 받은 access_token",
+                    schema = @Schema(implementation = String.class), in = ParameterIn.HEADER)
+    })
     public ResponseEntity<ProductResponseDto> changeProductName(
             @Validated @RequestBody ChangeProductNameDto changeProductNameDto) throws Exception {
         ProductResponseDto productResponseDto = productService.changeProductName(changeProductNameDto.getNumber(), changeProductNameDto.getName());
@@ -58,6 +62,10 @@ public class ProductController {
     }
 
     @DeleteMapping
+    @Parameters({
+            @Parameter(name = "X-AUTH-TOKEN", description = "로그인 성공 후 발급 받은 access_token",
+                    schema = @Schema(implementation = String.class), in = ParameterIn.HEADER)
+    })
     public ResponseEntity<Void> deleteProduct(Long number) throws Exception {
         productService.deleteProduct(number);
 
