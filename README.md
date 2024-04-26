@@ -10,14 +10,42 @@ The following technologies were used in the development of these projects:
 - Gradle
 - Spring Boot 3.2.2
 - PostgreSQL 14.10
-- Swagger (springdoc-openapi 2.3.0)
+- Redis
 
-## Contents
-These projects cover several key aspects of Spring Boot development, including:
+- **Spring Data JPA**: Object-relational mapping framework for database access.
 
-- **REST API Development**: The creation of RESTful APIs using Spring Boot, which provide a way for clients to interact with the application.
+- **OpenDSL**: Domain-specific language for defining data access logic.
 
-- **Spring Data JPA**: The usage of Spring Data JPA for the persistence layer, which simplifies the creation of database queries and operations.
+- **JUnit**: Unit testing framework for Java.
 
-- **Test Code Writing**: The writing of test codes to ensure the correct functioning of the application. This includes unit tests, integration tests, and end-to-end tests.
-h more detailed ones based on your actual projects.
+- **RestTemplate**: Spring's web service client for consuming REST APIs.
+
+- **Logback**: Logging framework for Java.
+
+- **Actuator**: Spring Boot's framework for exposing application metrics and health information.
+
+- **Spring Security**: JWT(JSON Web Token) for authentication and authorization.
+
+- **Swagger** (springdoc-openapi 2.3.0): OpenAPI specification generator for documenting REST APIs.
+
+## Features:
+
+* Create, read, update, and delete (CRUD) operations for products.
+
+* REST API endpoints for managing product data.
+
+* JPA-based data persistence using a relational database.
+
+* OpenDSL for concise and expressive data access logic.
+
+* Unit tests for thorough application validation.
+  
+* RestTemplate for consuming external APIs. (but actually not use external APIs)
+  
+* Logback for structured and flexible logging.
+  
+* Actuator for monitoring application health and performance.
+  
+* JWT-based authentication and authorization.
+  
+* Swagger documentation for comprehensive API exploration.
